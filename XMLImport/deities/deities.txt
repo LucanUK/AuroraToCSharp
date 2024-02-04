@@ -1,0 +1,69 @@
+   /* 
+    Licensed under the Apache License, Version 2.0
+    
+    http://www.apache.org/licenses/LICENSE-2.0
+    */
+using System;
+using System.Xml.Serialization;
+using System.Collections.Generic;
+namespace Xml2CSharp
+{
+	[XmlRoot(ElementName="p")]
+	public class P {
+		[XmlAttribute(AttributeName="class")]
+		public string Class { get; set; }
+		[XmlText]
+		public string Text { get; set; }
+	}
+
+	[XmlRoot(ElementName="description")]
+	public class Description {
+		[XmlElement(ElementName="p")]
+		public P P { get; set; }
+	}
+
+	[XmlRoot(ElementName="set")]
+	public class Set {
+		[XmlAttribute(AttributeName="name")]
+		public string Name { get; set; }
+		[XmlText]
+		public string Text { get; set; }
+	}
+
+	[XmlRoot(ElementName="setters")]
+	public class Setters {
+		[XmlElement(ElementName="set")]
+		public List<Set> Set { get; set; }
+	}
+
+	[XmlRoot(ElementName="sheet")]
+	public class Sheet {
+		[XmlElement(ElementName="description")]
+		public string Description { get; set; }
+	}
+
+	[XmlRoot(ElementName="element")]
+	public class Element {
+		[XmlElement(ElementName="description")]
+		public Description Description { get; set; }
+		[XmlElement(ElementName="setters")]
+		public Setters Setters { get; set; }
+		[XmlElement(ElementName="sheet")]
+		public Sheet Sheet { get; set; }
+		[XmlAttribute(AttributeName="name")]
+		public string Name { get; set; }
+		[XmlAttribute(AttributeName="type")]
+		public string Type { get; set; }
+		[XmlAttribute(AttributeName="source")]
+		public string Source { get; set; }
+		[XmlAttribute(AttributeName="id")]
+		public string Id { get; set; }
+	}
+
+	[XmlRoot(ElementName="elements")]
+	public class Elements {
+		[XmlElement(ElementName="element")]
+		public List<Element> Element { get; set; }
+	}
+
+}

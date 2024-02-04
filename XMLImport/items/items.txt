@@ -1,0 +1,61 @@
+namespace Items
+{
+	[XmlRoot(ElementName="description")]
+	public class Description {
+		[XmlElement(ElementName="p")]
+		public string P { get; set; }
+		[XmlElement(ElementName="div")]
+		public Div Div { get; set; }
+	}
+
+	[XmlRoot(ElementName="set")]
+	public class Set {
+		[XmlAttribute(AttributeName="name")]
+		public string Name { get; set; }
+		[XmlText]
+		public string Text { get; set; }
+		[XmlAttribute(AttributeName="currency")]
+		public string Currency { get; set; }
+		[XmlAttribute(AttributeName="lb")]
+		public string Lb { get; set; }
+		[XmlAttribute(AttributeName="type")]
+		public string Type { get; set; }
+	}
+
+	[XmlRoot(ElementName="setters")]
+	public class Setters {
+		[XmlElement(ElementName="set")]
+		public List<Set> Set { get; set; }
+	}
+
+	[XmlRoot(ElementName="element")]
+	public class Element {
+		[XmlElement(ElementName="supports")]
+		public string Supports { get; set; }
+		[XmlElement(ElementName="description")]
+		public Description Description { get; set; }
+		[XmlElement(ElementName="setters")]
+		public Setters Setters { get; set; }
+		[XmlAttribute(AttributeName="name")]
+		public string Name { get; set; }
+		[XmlAttribute(AttributeName="type")]
+		public string Type { get; set; }
+		[XmlAttribute(AttributeName="source")]
+		public string Source { get; set; }
+		[XmlAttribute(AttributeName="id")]
+		public string Id { get; set; }
+	}
+
+	[XmlRoot(ElementName="div")]
+	public class Div {
+		[XmlAttribute(AttributeName="element")]
+		public string Element { get; set; }
+	}
+
+	[XmlRoot(ElementName="elements")]
+	public class Elements {
+		[XmlElement(ElementName="element")]
+		public List<Element> Element { get; set; }
+	}
+
+}

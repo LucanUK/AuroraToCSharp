@@ -1,0 +1,105 @@
+   /* 
+    Licensed under the Apache License, Version 2.0
+    
+    http://www.apache.org/licenses/LICENSE-2.0
+    */
+using System;
+using System.Xml.Serialization;
+using System.Collections.Generic;
+namespace Xml2CSharp
+{
+	[XmlRoot(ElementName="set")]
+	public class Set {
+		[XmlAttribute(AttributeName="name")]
+		public string Name { get; set; }
+		[XmlText]
+		public string Text { get; set; }
+		[XmlAttribute(AttributeName="abbreviation")]
+		public string Abbreviation { get; set; }
+		[XmlAttribute(AttributeName="url")]
+		public string Url { get; set; }
+	}
+
+	[XmlRoot(ElementName="setters")]
+	public class Setters {
+		[XmlElement(ElementName="set")]
+		public List<Set> Set { get; set; }
+	}
+
+	[XmlRoot(ElementName="element")]
+	public class Element {
+		[XmlElement(ElementName="setters")]
+		public Setters Setters { get; set; }
+		[XmlAttribute(AttributeName="name")]
+		public string Name { get; set; }
+		[XmlAttribute(AttributeName="type")]
+		public string Type { get; set; }
+		[XmlAttribute(AttributeName="source")]
+		public string Source { get; set; }
+		[XmlAttribute(AttributeName="id")]
+		public string Id { get; set; }
+		[XmlElement(ElementName="compendium")]
+		public Compendium Compendium { get; set; }
+		[XmlElement(ElementName="supports")]
+		public string Supports { get; set; }
+		[XmlElement(ElementName="description")]
+		public Description Description { get; set; }
+		[XmlElement(ElementName="sheet")]
+		public Sheet Sheet { get; set; }
+		[XmlElement(ElementName="rules")]
+		public Rules Rules { get; set; }
+	}
+
+	[XmlRoot(ElementName="append")]
+	public class Append {
+		[XmlElement(ElementName="supports")]
+		public string Supports { get; set; }
+		[XmlAttribute(AttributeName="id")]
+		public string Id { get; set; }
+	}
+
+	[XmlRoot(ElementName="compendium")]
+	public class Compendium {
+		[XmlAttribute(AttributeName="display")]
+		public string Display { get; set; }
+	}
+
+	[XmlRoot(ElementName="description")]
+	public class Description {
+		[XmlElement(ElementName="html")]
+		public string Html { get; set; }
+	}
+
+	[XmlRoot(ElementName="sheet")]
+	public class Sheet {
+		[XmlElement(ElementName="description")]
+		public string Description { get; set; }
+		[XmlAttribute(AttributeName="alt")]
+		public string Alt { get; set; }
+		[XmlAttribute(AttributeName="display")]
+		public string Display { get; set; }
+	}
+
+	[XmlRoot(ElementName="grant")]
+	public class Grant {
+		[XmlAttribute(AttributeName="type")]
+		public string Type { get; set; }
+		[XmlAttribute(AttributeName="id")]
+		public string Id { get; set; }
+	}
+
+	[XmlRoot(ElementName="rules")]
+	public class Rules {
+		[XmlElement(ElementName="grant")]
+		public List<Grant> Grant { get; set; }
+	}
+
+	[XmlRoot(ElementName="elements")]
+	public class Elements {
+		[XmlElement(ElementName="element")]
+		public List<Element> Element { get; set; }
+		[XmlElement(ElementName="append")]
+		public Append Append { get; set; }
+	}
+
+}

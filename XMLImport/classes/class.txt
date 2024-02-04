@@ -1,0 +1,265 @@
+   /* 
+    Licensed under the Apache License, Version 2.0
+    
+    http://www.apache.org/licenses/LICENSE-2.0
+    */
+using System;
+using System.Xml.Serialization;
+using System.Collections.Generic;
+namespace Xml2CSharp
+{
+	[XmlRoot(ElementName="p")]
+	public class P {
+		[XmlAttribute(AttributeName="class")]
+		public string Class { get; set; }
+		[XmlText]
+		public string Text { get; set; }
+		[XmlElement(ElementName="i")]
+		public List<string> I { get; set; }
+		[XmlElement(ElementName="strong")]
+		public Strong Strong { get; set; }
+		[XmlElement(ElementName="em")]
+		public string Em { get; set; }
+	}
+
+	[XmlRoot(ElementName="li")]
+	public class Li {
+		[XmlElement(ElementName="strong")]
+		public string Strong { get; set; }
+	}
+
+	[XmlRoot(ElementName="ul")]
+	public class Ul {
+		[XmlElement(ElementName="li")]
+		public List<Li> Li { get; set; }
+		[XmlAttribute(AttributeName="class")]
+		public string Class { get; set; }
+	}
+
+	[XmlRoot(ElementName="h5")]
+	public class H5 {
+		[XmlAttribute(AttributeName="class")]
+		public string Class { get; set; }
+		[XmlText]
+		public string Text { get; set; }
+	}
+
+	[XmlRoot(ElementName="td")]
+	public class Td {
+		[XmlAttribute(AttributeName="class")]
+		public string Class { get; set; }
+		[XmlText]
+		public string Text { get; set; }
+	}
+
+	[XmlRoot(ElementName="tr")]
+	public class Tr {
+		[XmlElement(ElementName="td")]
+		public List<Td> Td { get; set; }
+	}
+
+	[XmlRoot(ElementName="thead")]
+	public class Thead {
+		[XmlElement(ElementName="tr")]
+		public Tr Tr { get; set; }
+	}
+
+	[XmlRoot(ElementName="table")]
+	public class Table {
+		[XmlElement(ElementName="thead")]
+		public Thead Thead { get; set; }
+		[XmlElement(ElementName="tr")]
+		public List<Tr> Tr { get; set; }
+		[XmlAttribute(AttributeName="class")]
+		public string Class { get; set; }
+	}
+
+	[XmlRoot(ElementName="div")]
+	public class Div {
+		[XmlAttribute(AttributeName="element")]
+		public string Element { get; set; }
+	}
+
+	[XmlRoot(ElementName="description")]
+	public class Description {
+		[XmlElement(ElementName="p")]
+		public List<P> P { get; set; }
+		[XmlElement(ElementName="h4")]
+		public List<string> H4 { get; set; }
+		[XmlElement(ElementName="h3")]
+		public string H3 { get; set; }
+		[XmlElement(ElementName="ul")]
+		public List<Ul> Ul { get; set; }
+		[XmlElement(ElementName="h5")]
+		public H5 H5 { get; set; }
+		[XmlElement(ElementName="table")]
+		public Table Table { get; set; }
+		[XmlElement(ElementName="div")]
+		public List<Div> Div { get; set; }
+		[XmlElement(ElementName="center")]
+		public Center Center { get; set; }
+	}
+
+	[XmlRoot(ElementName="sheet")]
+	public class Sheet {
+		[XmlElement(ElementName="description")]
+		public string Description { get; set; }
+		[XmlAttribute(AttributeName="display")]
+		public string Display { get; set; }
+		[XmlAttribute(AttributeName="usage")]
+		public string Usage { get; set; }
+		[XmlAttribute(AttributeName="action")]
+		public string Action { get; set; }
+	}
+
+	[XmlRoot(ElementName="set")]
+	public class Set {
+		[XmlAttribute(AttributeName="name")]
+		public string Name { get; set; }
+		[XmlText]
+		public string Text { get; set; }
+	}
+
+	[XmlRoot(ElementName="setters")]
+	public class Setters {
+		[XmlElement(ElementName="set")]
+		public List<Set> Set { get; set; }
+	}
+
+	[XmlRoot(ElementName="grant")]
+	public class Grant {
+		[XmlAttribute(AttributeName="type")]
+		public string Type { get; set; }
+		[XmlAttribute(AttributeName="id")]
+		public string Id { get; set; }
+		[XmlAttribute(AttributeName="requirements")]
+		public string Requirements { get; set; }
+		[XmlAttribute(AttributeName="level")]
+		public string Level { get; set; }
+		[XmlAttribute(AttributeName="spellcasting")]
+		public string Spellcasting { get; set; }
+	}
+
+	[XmlRoot(ElementName="select")]
+	public class Select {
+		[XmlAttribute(AttributeName="type")]
+		public string Type { get; set; }
+		[XmlAttribute(AttributeName="name")]
+		public string Name { get; set; }
+		[XmlAttribute(AttributeName="supports")]
+		public string Supports { get; set; }
+		[XmlAttribute(AttributeName="number")]
+		public string Number { get; set; }
+		[XmlAttribute(AttributeName="requirements")]
+		public string Requirements { get; set; }
+		[XmlAttribute(AttributeName="level")]
+		public string Level { get; set; }
+		[XmlAttribute(AttributeName="spellcasting")]
+		public string Spellcasting { get; set; }
+		[XmlAttribute(AttributeName="default")]
+		public string Default { get; set; }
+		[XmlAttribute(AttributeName="default-behaviour")]
+		public string Defaultbehaviour { get; set; }
+	}
+
+	[XmlRoot(ElementName="rules")]
+	public class Rules {
+		[XmlElement(ElementName="grant")]
+		public List<Grant> Grant { get; set; }
+		[XmlElement(ElementName="select")]
+		public List<Select> Select { get; set; }
+		[XmlElement(ElementName="stat")]
+		public List<Stat> Stat { get; set; }
+	}
+
+	[XmlRoot(ElementName="multiclass")]
+	public class Multiclass {
+		[XmlElement(ElementName="prerequisite")]
+		public string Prerequisite { get; set; }
+		[XmlElement(ElementName="requirements")]
+		public string Requirements { get; set; }
+		[XmlElement(ElementName="setters")]
+		public Setters Setters { get; set; }
+		[XmlElement(ElementName="rules")]
+		public Rules Rules { get; set; }
+		[XmlAttribute(AttributeName="id")]
+		public string Id { get; set; }
+	}
+
+	[XmlRoot(ElementName="element")]
+	public class Element {
+		[XmlElement(ElementName="description")]
+		public Description Description { get; set; }
+		[XmlElement(ElementName="sheet")]
+		public Sheet Sheet { get; set; }
+		[XmlElement(ElementName="setters")]
+		public Setters Setters { get; set; }
+		[XmlElement(ElementName="rules")]
+		public Rules Rules { get; set; }
+		[XmlElement(ElementName="multiclass")]
+		public Multiclass Multiclass { get; set; }
+		[XmlAttribute(AttributeName="name")]
+		public string Name { get; set; }
+		[XmlAttribute(AttributeName="type")]
+		public string Type { get; set; }
+		[XmlAttribute(AttributeName="source")]
+		public string Source { get; set; }
+		[XmlAttribute(AttributeName="id")]
+		public string Id { get; set; }
+		[XmlElement(ElementName="spellcasting")]
+		public Spellcasting Spellcasting { get; set; }
+		[XmlElement(ElementName="compendium")]
+		public Compendium Compendium { get; set; }
+		[XmlElement(ElementName="supports")]
+		public string Supports { get; set; }
+	}
+
+	[XmlRoot(ElementName="center")]
+	public class Center {
+		[XmlElement(ElementName="p")]
+		public List<P> P { get; set; }
+	}
+
+	[XmlRoot(ElementName="spellcasting")]
+	public class Spellcasting {
+		[XmlElement(ElementName="list")]
+		public string List { get; set; }
+		[XmlAttribute(AttributeName="name")]
+		public string Name { get; set; }
+		[XmlAttribute(AttributeName="ability")]
+		public string Ability { get; set; }
+		[XmlAttribute(AttributeName="prepare")]
+		public string Prepare { get; set; }
+	}
+
+	[XmlRoot(ElementName="stat")]
+	public class Stat {
+		[XmlAttribute(AttributeName="name")]
+		public string Name { get; set; }
+		[XmlAttribute(AttributeName="value")]
+		public string Value { get; set; }
+		[XmlAttribute(AttributeName="level")]
+		public string Level { get; set; }
+		[XmlAttribute(AttributeName="bonus")]
+		public string Bonus { get; set; }
+	}
+
+	[XmlRoot(ElementName="compendium")]
+	public class Compendium {
+		[XmlAttribute(AttributeName="display")]
+		public string Display { get; set; }
+	}
+
+	[XmlRoot(ElementName="strong")]
+	public class Strong {
+		[XmlElement(ElementName="em")]
+		public string Em { get; set; }
+	}
+
+	[XmlRoot(ElementName="elements")]
+	public class Elements {
+		[XmlElement(ElementName="element")]
+		public List<Element> Element { get; set; }
+	}
+
+}

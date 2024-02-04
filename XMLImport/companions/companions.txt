@@ -1,0 +1,91 @@
+   /* 
+    Licensed under the Apache License, Version 2.0
+    
+    http://www.apache.org/licenses/LICENSE-2.0
+    */
+using System;
+using System.Xml.Serialization;
+using System.Collections.Generic;
+namespace Xml2CSharp
+{
+	[XmlRoot(ElementName="set")]
+	public class Set {
+		[XmlAttribute(AttributeName="name")]
+		public string Name { get; set; }
+		[XmlText]
+		public string Text { get; set; }
+	}
+
+	[XmlRoot(ElementName="setters")]
+	public class Setters {
+		[XmlElement(ElementName="set")]
+		public List<Set> Set { get; set; }
+	}
+
+	[XmlRoot(ElementName="stat")]
+	public class Stat {
+		[XmlAttribute(AttributeName="name")]
+		public string Name { get; set; }
+		[XmlAttribute(AttributeName="value")]
+		public string Value { get; set; }
+		[XmlAttribute(AttributeName="bonus")]
+		public string Bonus { get; set; }
+	}
+
+	[XmlRoot(ElementName="rules")]
+	public class Rules {
+		[XmlElement(ElementName="stat")]
+		public List<Stat> Stat { get; set; }
+	}
+
+	[XmlRoot(ElementName="element")]
+	public class Element {
+		[XmlElement(ElementName="setters")]
+		public Setters Setters { get; set; }
+		[XmlElement(ElementName="rules")]
+		public Rules Rules { get; set; }
+		[XmlAttribute(AttributeName="name")]
+		public string Name { get; set; }
+		[XmlAttribute(AttributeName="type")]
+		public string Type { get; set; }
+		[XmlAttribute(AttributeName="source")]
+		public string Source { get; set; }
+		[XmlAttribute(AttributeName="id")]
+		public string Id { get; set; }
+		[XmlElement(ElementName="description")]
+		public Description Description { get; set; }
+		[XmlElement(ElementName="sheet")]
+		public Sheet Sheet { get; set; }
+		[XmlElement(ElementName="supports")]
+		public string Supports { get; set; }
+	}
+
+	[XmlRoot(ElementName="description")]
+	public class Description {
+		[XmlElement(ElementName="p")]
+		public P P { get; set; }
+	}
+
+	[XmlRoot(ElementName="sheet")]
+	public class Sheet {
+		[XmlElement(ElementName="description")]
+		public string Description { get; set; }
+		[XmlAttribute(AttributeName="usage")]
+		public string Usage { get; set; }
+	}
+
+	[XmlRoot(ElementName="p")]
+	public class P {
+		[XmlAttribute(AttributeName="class")]
+		public string Class { get; set; }
+		[XmlText]
+		public string Text { get; set; }
+	}
+
+	[XmlRoot(ElementName="elements")]
+	public class Elements {
+		[XmlElement(ElementName="element")]
+		public List<Element> Element { get; set; }
+	}
+
+}
