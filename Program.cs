@@ -6,16 +6,36 @@ using System.Net.Http.Headers;
 using System.Linq;
 
 
+
 string sourceFolderPath = "C:\\Users\\Lucan\\Documents\\Src\\XMLImport";
 string spellsFolderPath = sourceFolderPath + "\\spells";
 string itemsFolderPath = sourceFolderPath + "\\items";
 string racesFolderPath = sourceFolderPath + "\\races";
 string classesFolderPath = sourceFolderPath + "\\classes";
+
 List<Spells.Elements> SpellsList = new List<Spells.Elements>();
 List<Items.Elements> ItemsList = new List<Items.Elements>();
 List<Races.Elements> RacesList = new List<Races.Elements>();
 List<Classes.Elements> ClassesList = new List<Classes.Elements>();
-
+ static void Serializer_UnknownElement(object sender, XmlElementEventArgs e)
+{
+    if (e.ObjectBeingDeserialized is Races.Element raceelement)
+    {
+        if (e.Element.Name == "description")
+        {
+            raceelement.Description_Custom = e.Element.InnerXml;
+            return;
+        }
+    }
+    if (e.ObjectBeingDeserialized is Classes.Element classelement)
+    {
+        if (e.Element.Name == "description")
+        {
+            classelement.Description_Custom = e.Element.InnerXml;
+            return;
+        }
+    }
+}
 if (Directory.Exists(spellsFolderPath))
 {
     DirectoryInfo dirSource = new DirectoryInfo(spellsFolderPath);
@@ -76,6 +96,7 @@ if (Directory.Exists(racesFolderPath))
         try
         {
             XmlSerializer serializer = new XmlSerializer(typeof(Races.Elements));
+            serializer.UnknownElement += Serializer_UnknownElement;
             using (TextReader reader = new StringReader(System.IO.File.ReadAllText(nextFile.FullName)))
             {
                 Races.Elements result = serializer.Deserialize(reader) as Races.Elements;
@@ -100,6 +121,7 @@ if (Directory.Exists(classesFolderPath))
         try
         {
             XmlSerializer serializer = new XmlSerializer(typeof(Classes.Elements));
+            serializer.UnknownElement += Serializer_UnknownElement;
             using (TextReader reader = new StringReader(System.IO.File.ReadAllText(nextFile.FullName)))
             {
                 Classes.Elements result = serializer.Deserialize(reader) as Classes.Elements;
@@ -113,9 +135,62 @@ if (Directory.Exists(classesFolderPath))
     }
 }
 
-var query = RacesList.Where(c => c.Element.Select(cr => cr.Name).Contains("Human"));
+
+var query = RacesList.SelectMany(c => c.Element).Where(cr => cr.Type == "Race");
+var query1 = RacesList.SelectMany(c => c.Element).Where(cr => cr.Name == "Human");
+var query2 = ClassesList.SelectMany(c => c.Element).Where(cr => cr.Name == "Bard");
+
 int test;
 test = 1;
+
+namespace SelfHost
+{
+
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Web.Http;
+
+    public class Product
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Category { get; set; }
+        public decimal Price { get; set; }
+    }
+
+    public class ProductsController : ApiController
+    {
+        Product[] products = new Product[]
+        {
+            new Product { Id = 1, Name = "Tomato Soup", Category = "Groceries", Price = 1 },
+            new Product { Id = 2, Name = "Yo-yo", Category = "Toys", Price = 3.75M },
+            new Product { Id = 3, Name = "Hammer", Category = "Hardware", Price = 16.99M }
+        };
+
+        public IEnumerable<Product> GetAllProducts()
+        {
+            return products;
+        }
+
+        public Product GetProductById(int id)
+        {
+            var product = products.FirstOrDefault((p) => p.Id == id);
+            if (product == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
+            return product;
+        }
+
+        public IEnumerable<Product> GetProductsByCategory(string category)
+        {
+            return products.Where(p => string.Equals(p.Category, category,
+                    StringComparison.OrdinalIgnoreCase));
+        }
+    }
+}
 namespace Items
 {
     [XmlRoot(ElementName = "description")]
@@ -438,8 +513,9 @@ namespace Races
     [XmlRoot(ElementName = "element")]
     public class Element
     {
-        [XmlElement(ElementName = "description")]
-        public Description Description { get; set; }
+        public string Description_Custom { get; set; }
+       /* [XmlElement(ElementName = "description")]
+        public Description Description { get; set; }*/
         [XmlElement(ElementName = "sheet")]
         public Sheet Sheet { get; set; }
         [XmlElement(ElementName = "setters")]
@@ -696,8 +772,9 @@ namespace Classes
     [XmlRoot(ElementName = "element")]
     public class Element
     {
-        [XmlElement(ElementName = "description")]
-        public Description Description { get; set; }
+        public string Description_Custom { get; set; }
+        /*[XmlElement(ElementName = "description")]
+        public Description Description { get; set; }*/
         [XmlElement(ElementName = "sheet")]
         public Sheet Sheet { get; set; }
         [XmlElement(ElementName = "setters")]
@@ -777,3 +854,5 @@ namespace Classes
     }
 
 }
+
+
