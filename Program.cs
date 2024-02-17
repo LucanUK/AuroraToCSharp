@@ -46,6 +46,14 @@ internal class Program
                     return;
                 }
             }
+            if (e.ObjectBeingDeserialized is Spells.Element spellelement)
+            {
+                if (e.Element.Name == "description")
+                {
+                    spellelement.Description_Custom = e.Element.InnerXml;
+                    return;
+                }
+            }
         }
         if (Directory.Exists(spellsFolderPath))
         {
@@ -59,6 +67,7 @@ internal class Program
                 try
                 {
                     XmlSerializer serializer = new XmlSerializer(typeof(Spells.Elements));
+                    serializer.UnknownElement += Serializer_UnknownElement;
                     using (TextReader reader = new StringReader(File.ReadAllText(nextFile.FullName)))
                     {
                         Spells.Elements result = serializer.Deserialize(reader) as Spells.Elements;
@@ -156,6 +165,21 @@ internal class Program
         Classes.Element ClassCurrent;
         ClassCurrent = FindClass(ClassesList, SearchClass);
 
+        string SearchSpell = "Detect Magic";
+        Spells.Element SpellCurrent;
+        SpellCurrent = FindSpell(SpellsList, SearchSpell);
+
+        string SearchWeapon = "Quarterstaff";
+        Items.Element WeaponCurrent;
+        WeaponCurrent = FindWeapon(ItemsList, SearchWeapon);
+
+        string SearchArmour = "Breastplate";
+        Items.Element ArmourCurrent;
+        ArmourCurrent = FindArmour(ItemsList, SearchArmour);
+
+      /*  string SearchItem = "Wand";
+        Items.Element ItemCurrent;
+        ItemCurrent = FindItem(ItemsList, SearchItem);*/
 
         int test = 1;
 
@@ -184,6 +208,63 @@ internal class Program
             {
 
                 return Class;
+            }
+            return null;
+        }
+        static Spells.Element? FindSpell(List<Spells.Elements> SpellsList, string SearchSpell)
+        {
+
+
+            var SpellsListResult = SpellsList.SelectMany(c => c.Element).Where(cr => cr.Type == "Spell");
+
+            foreach (var Spell in SpellsListResult.Where(Spells => Spells.Name == SearchSpell)
+            )
+            {
+
+                return Spell;
+            }
+            return null;
+        }
+        static Items.Element? FindWeapon(List<Items.Elements> ItemsList, string SearchWeapon)
+        {
+
+
+            Items.Elements? WeaponsListResult = ItemsList[6];
+            //var WeaponsListResult = ItemsListResult.  SelectMany(c => c.Element).Where(cr => cr.Type == "Spell");
+
+            foreach (var Weapon in WeaponsListResult.Element.Where(Weapons => Weapons.Name == SearchWeapon)
+            )
+            {
+                return Weapon;
+            }
+            return null;
+        }
+        static Items.Element? FindArmour(List<Items.Elements> ItemsList, string SearchArmour)
+        {
+
+
+            Items.Elements? ArmourListResult = ItemsList[0];
+            //var WeaponsListResult = ItemsListResult.  SelectMany(c => c.Element).Where(cr => cr.Type == "Spell");
+
+            foreach (var Armour in ArmourListResult.Element.Where(Armours => Armours.Name == SearchArmour)
+            )
+            {
+                return Armour;
+            }
+            return null;
+        }
+        static Items.Element? FindItem(List<Items.Elements> ItemsList, string SearchItem)
+        {
+
+
+            Items.Elements? ItemsListResult = (Items.Elements)ItemsList.SelectMany(c => c.Element).Where(cr => cr.Type == "Item").AsQueryable();
+
+            //var WeaponsListResult = ItemsListResult.  SelectMany(c => c.Element).Where(cr => cr.Type == "Spell");
+
+            foreach (var Item in ItemsListResult.Element.Where(Items => Items.Name == SearchItem)
+            )
+            {
+                return Item;
             }
             return null;
         }
