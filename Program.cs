@@ -4,148 +4,195 @@ using System.Collections.Generic;
 using static System.Reflection.Metadata.BlobBuilder;
 using System.Net.Http.Headers;
 using System.Linq;
+using System.Security.Claims;
 
-
-
-string sourceFolderPath = "C:\\Users\\Lucan\\Documents\\Src\\XMLImport";
-string spellsFolderPath = sourceFolderPath + "\\spells";
-string itemsFolderPath = sourceFolderPath + "\\items";
-string racesFolderPath = sourceFolderPath + "\\races";
-string classesFolderPath = sourceFolderPath + "\\classes";
-
-List<Spells.Elements> SpellsList = new List<Spells.Elements>();
-List<Items.Elements> ItemsList = new List<Items.Elements>();
-List<Races.Elements> RacesList = new List<Races.Elements>();
-List<Classes.Elements> ClassesList = new List<Classes.Elements>();
- static void Serializer_UnknownElement(object sender, XmlElementEventArgs e)
+internal class Program
 {
-    if (e.ObjectBeingDeserialized is Races.Element raceelement)
+    private static void Main(string[] args)
     {
-        if (e.Element.Name == "description")
-        {
-            raceelement.Description_Custom = e.Element.InnerXml;
-            return;
-        }
-    }
-    if (e.ObjectBeingDeserialized is Classes.Element classelement)
-    {
-        if (e.Element.Name == "description")
-        {
-            classelement.Description_Custom = e.Element.InnerXml;
-            return;
-        }
-    }
-}
-if (Directory.Exists(spellsFolderPath))
-{
-    DirectoryInfo dirSource = new DirectoryInfo(spellsFolderPath);
-    var SpellsXMLFiles = dirSource.GetFiles("*.xml", SearchOption.AllDirectories).ToList();
+        string sourceFolderPath = "C:\\Users\\Lucan\\source\\repos\\AuroraToCSharp\\XMLImport";
+        string spellsFolderPath = sourceFolderPath + "\\spells";
+        string itemsFolderPath = sourceFolderPath + "\\items";
+        string racesFolderPath = sourceFolderPath + "\\races";
+        string classesFolderPath = sourceFolderPath + "\\classes";
 
-    
-
-    foreach (var nextFile in SpellsXMLFiles)
-    {
-        try
+        List<Spells.Elements> SpellsList = new List<Spells.Elements>();
+        List<Items.Elements> ItemsList = new List<Items.Elements>();
+        List<Races.Elements> RacesList = new List<Races.Elements>();
+        List<Classes.Elements> ClassesList = new List<Classes.Elements>();
+        static void Serializer_UnknownElement(object sender, XmlElementEventArgs e)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(Spells.Elements));
-            using (TextReader reader = new StringReader(System.IO.File.ReadAllText(nextFile.FullName)))
+            if (e.ObjectBeingDeserialized is Races.Element raceelement)
             {
-                Spells.Elements result = serializer.Deserialize(reader) as Spells.Elements;
-                SpellsList.Add(result);
+                if (e.Element.Name == "description")
+                {
+                    raceelement.Description_Custom = e.Element.InnerXml;
+                    return;
+                }
+            }
+            if (e.ObjectBeingDeserialized is Classes.Element classelement)
+            {
+                if (e.Element.Name == "description")
+                {
+                    classelement.Description_Custom = e.Element.InnerXml;
+                    return;
+                }
+            }
+            if (e.ObjectBeingDeserialized is Items.Element itemelement)
+            {
+                if (e.Element.Name == "description")
+                {
+                    itemelement.Description_Custom = e.Element.InnerXml;
+                    return;
+                }
             }
         }
-        catch (Exception ex)
+        if (Directory.Exists(spellsFolderPath))
         {
+            DirectoryInfo dirSource = new DirectoryInfo(spellsFolderPath);
+            var SpellsXMLFiles = dirSource.GetFiles("*.xml", SearchOption.AllDirectories).ToList();
 
-        }
-    }
-}
-if (Directory.Exists(itemsFolderPath))
-{
-    DirectoryInfo dirSource = new DirectoryInfo(itemsFolderPath);
-    var ItemXMLFiles = dirSource.GetFiles("*.xml", SearchOption.AllDirectories).ToList();
 
- 
 
-    foreach (var nextFile in ItemXMLFiles)
-    {
-        try
-        {
-            XmlSerializer serializer = new XmlSerializer(typeof(Items.Elements));
-            using (TextReader reader = new StringReader(System.IO.File.ReadAllText(nextFile.FullName)))
+            foreach (var nextFile in SpellsXMLFiles)
             {
-                Items.Elements result = serializer.Deserialize(reader) as Items.Elements;
-                ItemsList.Add(result);
+                try
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(Spells.Elements));
+                    using (TextReader reader = new StringReader(File.ReadAllText(nextFile.FullName)))
+                    {
+                        Spells.Elements result = serializer.Deserialize(reader) as Spells.Elements;
+                        SpellsList.Add(result);
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                }
             }
         }
-        catch (Exception ex)
+        if (Directory.Exists(itemsFolderPath))
         {
-
-        }
-    }
-}
-if (Directory.Exists(racesFolderPath))
-{
-    DirectoryInfo dirSource = new DirectoryInfo(racesFolderPath);
-    var AllXMLFiles = dirSource.GetFiles("*.xml", SearchOption.AllDirectories).ToList();
+            DirectoryInfo dirSource = new DirectoryInfo(itemsFolderPath);
+            var ItemXMLFiles = dirSource.GetFiles("*.xml", SearchOption.AllDirectories).ToList();
 
 
 
-    foreach (var nextFile in AllXMLFiles)
-    {
-        try
-        {
-            XmlSerializer serializer = new XmlSerializer(typeof(Races.Elements));
-            serializer.UnknownElement += Serializer_UnknownElement;
-            using (TextReader reader = new StringReader(System.IO.File.ReadAllText(nextFile.FullName)))
+            foreach (var nextFile in ItemXMLFiles)
             {
-                Races.Elements result = serializer.Deserialize(reader) as Races.Elements;
-                RacesList.Add(result);
+                try
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(Items.Elements));
+                    serializer.UnknownElement += Serializer_UnknownElement;
+                    using (TextReader reader = new StringReader(File.ReadAllText(nextFile.FullName)))
+                    {
+                        Items.Elements result = serializer.Deserialize(reader) as Items.Elements;
+                        ItemsList.Add(result);
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                }
             }
         }
-        catch (Exception ex)
+        if (Directory.Exists(racesFolderPath))
         {
-
-        }
-    }
-}
-if (Directory.Exists(classesFolderPath))
-{
-    DirectoryInfo dirSource = new DirectoryInfo(classesFolderPath);
-    var AllXMLFiles = dirSource.GetFiles("*.xml", SearchOption.AllDirectories).ToList();
+            DirectoryInfo dirSource = new DirectoryInfo(racesFolderPath);
+            var AllXMLFiles = dirSource.GetFiles("*.xml", SearchOption.AllDirectories).ToList();
 
 
 
-    foreach (var nextFile in AllXMLFiles)
-    {
-        try
-        {
-            XmlSerializer serializer = new XmlSerializer(typeof(Classes.Elements));
-            serializer.UnknownElement += Serializer_UnknownElement;
-            using (TextReader reader = new StringReader(System.IO.File.ReadAllText(nextFile.FullName)))
+            foreach (var nextFile in AllXMLFiles)
             {
-                Classes.Elements result = serializer.Deserialize(reader) as Classes.Elements;
-                ClassesList.Add(result);
+                try
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(Races.Elements));
+                    serializer.UnknownElement += Serializer_UnknownElement;
+                    using (TextReader reader = new StringReader(File.ReadAllText(nextFile.FullName)))
+                    {
+                        Races.Elements result = serializer.Deserialize(reader) as Races.Elements;
+                        RacesList.Add(result);
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                }
             }
         }
-        catch (Exception ex)
+        if (Directory.Exists(classesFolderPath))
+        {
+            DirectoryInfo dirSource = new DirectoryInfo(classesFolderPath);
+            var AllXMLFiles = dirSource.GetFiles("*.xml", SearchOption.AllDirectories).ToList();
+
+
+
+            foreach (var nextFile in AllXMLFiles)
+            {
+                try
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(Classes.Elements));
+                    serializer.UnknownElement += Serializer_UnknownElement;
+                    using (TextReader reader = new StringReader(File.ReadAllText(nextFile.FullName)))
+                    {
+                        Classes.Elements result = serializer.Deserialize(reader) as Classes.Elements;
+                        ClassesList.Add(result);
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+        }
+
+
+        string SearchRace = "Human";
+        Races.Element RaceCurrent;
+        RaceCurrent = FindRace(RacesList, SearchRace);
+
+        string SearchClass = "Fighter";
+        Classes.Element ClassCurrent;
+        ClassCurrent = FindClass(ClassesList, SearchClass);
+
+
+        int test = 1;
+
+        static Races.Element? FindRace(List<Races.Elements> RacesList, string SearchRace)
         {
 
+
+            var RacesListResult = RacesList.SelectMany(c => c.Element).Where(cr => cr.Type == "Race");
+
+            foreach (var Race in RacesListResult.Where(Races => Races.Name == SearchRace)
+            )
+            {
+
+                return Race;
+            }
+            return null;
+        }
+        static Classes.Element? FindClass(List<Classes.Elements> ClassesList, string SearchClass)
+        {
+
+
+            var ClassListResult = ClassesList.SelectMany(c => c.Element).Where(cr => cr.Type == "Class");
+
+            foreach (var Class in ClassListResult.Where(Classes => Classes.Name == SearchClass)
+            )
+            {
+
+                return Class;
+            }
+            return null;
         }
     }
 }
-
-
-var query = RacesList.SelectMany(c => c.Element).Where(cr => cr.Type == "Race");
-var query1 = RacesList.SelectMany(c => c.Element).Where(cr => cr.Name == "Human");
-var query2 = ClassesList.SelectMany(c => c.Element).Where(cr => cr.Name == "Bard");
-
-int test;
-test = 1;
-
 
 namespace Items
 {
+
     [XmlRoot(ElementName = "description")]
     public class Description
     {
@@ -182,8 +229,9 @@ namespace Items
     {
         [XmlElement(ElementName = "supports")]
         public string Supports { get; set; }
-        [XmlElement(ElementName = "description")]
-        public Description Description { get; set; }
+        public string Description_Custom { get; set; }
+        /*[XmlElement(ElementName = "description")]
+        public Description Description { get; set; }*/
         [XmlElement(ElementName = "setters")]
         public Setters Setters { get; set; }
         [XmlAttribute(AttributeName = "name")]
@@ -262,8 +310,9 @@ namespace Spells
     {
         [XmlElement(ElementName = "supports")]
         public string Supports { get; set; }
-        [XmlElement(ElementName = "description")]
-        public Description Description { get; set; }
+        public string Description_Custom { get; set; }
+      /* [XmlElement(ElementName = "description")]
+        public Description Description { get; set; } */
         [XmlElement(ElementName = "setters")]
         public Setters Setters { get; set; }
         [XmlAttribute(AttributeName = "name")]
@@ -467,8 +516,8 @@ namespace Races
     public class Element
     {
         public string Description_Custom { get; set; }
-       /* [XmlElement(ElementName = "description")]
-        public Description Description { get; set; }*/
+        /* [XmlElement(ElementName = "description")]
+         public Description Description { get; set; }*/
         [XmlElement(ElementName = "sheet")]
         public Sheet Sheet { get; set; }
         [XmlElement(ElementName = "setters")]
