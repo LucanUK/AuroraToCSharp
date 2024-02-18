@@ -10,6 +10,7 @@ internal class Program
 {
     private static void Main(string[] args)
     {
+        
         string sourceFolderPath = "C:\\Users\\Lucan\\source\\repos\\AuroraToCSharp\\XMLImport";
         string spellsFolderPath = sourceFolderPath + "\\spells";
         string itemsFolderPath = sourceFolderPath + "\\items";
@@ -17,6 +18,7 @@ internal class Program
         string classesFolderPath = sourceFolderPath + "\\classes";
 
         List<Spells.Elements> SpellsList = new List<Spells.Elements>();
+        Spells.Elements SpellsClassList = new Spells.Elements();
         List<Items.Elements> ItemsList = new List<Items.Elements>();
         List<Races.Elements> RacesList = new List<Races.Elements>();
         List<Classes.Elements> ClassesList = new List<Classes.Elements>();
@@ -158,28 +160,29 @@ internal class Program
 
 
         string SearchRace = "Human";
-        Races.Element RaceCurrent;
-        RaceCurrent = FindRace(RacesList, SearchRace);
+        Races.Element RaceCurrent = FindRace(RacesList, SearchRace);
 
-        string SearchClass = "Fighter";
-        Classes.Element ClassCurrent;
-        ClassCurrent = FindClass(ClassesList, SearchClass);
+        string SearchClass = "Cleric";
+        Classes.Element ClassCurrent = FindClass(ClassesList, SearchClass);
 
         string SearchSpell = "Detect Magic";
-        Spells.Element SpellCurrent;
-        SpellCurrent = FindSpell(SpellsList, SearchSpell);
+        Spells.Element SpellCurrent = FindSpell(SpellsList, SearchSpell);
 
         string SearchWeapon = "Quarterstaff";
-        Items.Element WeaponCurrent;
-        WeaponCurrent = FindWeapon(ItemsList, SearchWeapon);
+        Items.Element WeaponCurrent = FindWeapon(ItemsList, SearchWeapon);
 
         string SearchArmour = "Breastplate";
-        Items.Element ArmourCurrent;
-        ArmourCurrent = FindArmour(ItemsList, SearchArmour);
+        Items.Element ArmourCurrent = FindArmour(ItemsList, SearchArmour);
 
-      /*  string SearchItem = "Wand";
-        Items.Element ItemCurrent;
-        ItemCurrent = FindItem(ItemsList, SearchItem);*/
+        string SearchItem = "Wand";
+        Items.Element ItemCurrent = FindItem(ItemsList, SearchItem);
+
+        List<Spells.Element?> SpellClassCurrent = FindSpellByClass(SpellsList, SearchClass);
+        
+        string SearchSpellLevel = "3";
+        List<Spells.Element?> SpellClassLevelCurrent = FindSpellByClassBySpellLevel(SpellsList, SearchClass, SearchSpellLevel);
+        
+
 
         int test = 1;
 
@@ -257,17 +260,39 @@ internal class Program
         {
 
 
-            Items.Elements? ItemsListResult = (Items.Elements)ItemsList.SelectMany(c => c.Element).Where(cr => cr.Type == "Item").AsQueryable();
+            var ItemsListResult = ItemsList.SelectMany(c => c.Element).Where(cr => cr.Type == "Item");
 
             //var WeaponsListResult = ItemsListResult.  SelectMany(c => c.Element).Where(cr => cr.Type == "Spell");
 
-            foreach (var Item in ItemsListResult.Element.Where(Items => Items.Name == SearchItem)
+            foreach (var Item in ItemsListResult.Where(Items => Items.Name == SearchItem)
             )
             {
                 return Item;
             }
             return null;
         }
+        static List<Spells.Element?> FindSpellByClass(List<Spells.Elements> SpellsList, string SearchClass)
+        {
+
+
+            var SpellsListResult = SpellsList.SelectMany(c => c.Element).Where(cr => cr.Type == "Spell");
+            var ClassSpellsResult = SpellsListResult.Where(Spells => Spells.Supports.Contains(SearchClass));
+            return ClassSpellsResult.ToList();
+            int test = 1;
+            return null;
+
+        }
+        static List<Spells.Element?> FindSpellByClassBySpellLevel(List<Spells.Elements> SpellsList, string SearchClass, string SearchSpellLevel)
+        {
+            
+            var ClassSpellsList = FindSpellByClass(SpellsList, SearchClass);
+            var ClassSpellsResult = ClassSpellsList.Where(Spells => Spells.Setters.Set[1].Text == SearchSpellLevel);
+            return ClassSpellsResult.ToList();
+            int test = 1;
+            return null;
+
+        }
+        
     }
 }
 
