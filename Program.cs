@@ -1,10 +1,10 @@
 ﻿using System.Xml.Serialization;
-using System;
+/*using System;
 using System.Collections.Generic;
 using static System.Reflection.Metadata.BlobBuilder;
 using System.Net.Http.Headers;
 using System.Linq;
-using System.Security.Claims;
+using System.Security.Claims;*/
 
 internal class Program
 {
@@ -18,7 +18,6 @@ internal class Program
         string classesFolderPath = sourceFolderPath + "\\classes";
 
         List<Spells.Elements> SpellsList = new List<Spells.Elements>();
-        Spells.Elements SpellsClassList = new Spells.Elements();
         List<Items.Elements> ItemsList = new List<Items.Elements>();
         List<Races.Elements> RacesList = new List<Races.Elements>();
         List<Classes.Elements> ClassesList = new List<Classes.Elements>();
@@ -159,31 +158,23 @@ internal class Program
         }
 
 
-        string SearchRace = "Human";
-        Races.Element RaceCurrent = FindRace(RacesList, SearchRace);
-
-        string SearchClass = "Cleric";
-        Classes.Element ClassCurrent = FindClass(ClassesList, SearchClass);
-
+        string SearchRace = "Elf";
+        string SearchClass = "Druid";
         string SearchSpell = "Detect Magic";
+        string SearchWeapon = "Rapier";
+        string SearchArmour = "Ring Mail";
+        string SearchItem = "Bag Of Holding";
+        string SearchSpellLevel = "5";
+
+        Races.Element RaceCurrent = FindRace(RacesList, SearchRace);
+        Classes.Element ClassCurrent = FindClass(ClassesList, SearchClass);
         Spells.Element SpellCurrent = FindSpell(SpellsList, SearchSpell);
-
-        string SearchWeapon = "Quarterstaff";
         Items.Element WeaponCurrent = FindWeapon(ItemsList, SearchWeapon);
-
-        string SearchArmour = "Breastplate";
         Items.Element ArmourCurrent = FindArmour(ItemsList, SearchArmour);
-
-        string SearchItem = "Wand";
         Items.Element ItemCurrent = FindItem(ItemsList, SearchItem);
-
         List<Spells.Element?> SpellClassCurrent = FindSpellByClass(SpellsList, SearchClass);
-        
-        string SearchSpellLevel = "3";
         List<Spells.Element?> SpellClassLevelCurrent = FindSpellByClassBySpellLevel(SpellsList, SearchClass, SearchSpellLevel);
         
-
-
         int test = 1;
 
         static Races.Element? FindRace(List<Races.Elements> RacesList, string SearchRace)
