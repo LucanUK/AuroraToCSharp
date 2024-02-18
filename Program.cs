@@ -158,24 +158,80 @@ internal class Program
         }
 
 
-        string SearchRace = "Elf";
+        // Old Vars
+        /*string SearchRace = "Elf";
         string SearchClass = "Druid";
         string SearchSpell = "Detect Magic";
         string SearchWeapon = "Rapier";
         string SearchArmour = "Ring Mail";
         string SearchItem = "Bag Of Holding";
-        string SearchSpellLevel = "5";
+        string SearchSpellLevel = "5";*/
+
+
+        string SearchRace = "Elf";
+        string SearchWeapon = "Rapier";
+        string SearchArmour = "Ring Mail";
+        string SearchItem = "Bag Of Holding";
+        // SpellAll Test Vars
+        string SearchClass = "Druid";
+        string SearchSpell = null;
+        string SearchSpellLevel = "2";
+
+        // OLD Spell Search Calls
+        // Spells.Element SpellCurrent = FindSpell(SpellsList, SearchSpell);
+        // List<Spells.Element?> SpellClassCurrent = FindSpellByClass(SpellsList, SearchClass);
+        // List<Spells.Element?> SpellClassLevelCurrent = FindSpellByClassBySpellLevel(SpellsList, SearchClass, SearchSpellLevel);
 
         Races.Element RaceCurrent = FindRace(RacesList, SearchRace);
         Classes.Element ClassCurrent = FindClass(ClassesList, SearchClass);
-        Spells.Element SpellCurrent = FindSpell(SpellsList, SearchSpell);
+       
         Items.Element WeaponCurrent = FindWeapon(ItemsList, SearchWeapon);
         Items.Element ArmourCurrent = FindArmour(ItemsList, SearchArmour);
         Items.Element ItemCurrent = FindItem(ItemsList, SearchItem);
-        List<Spells.Element?> SpellClassCurrent = FindSpellByClass(SpellsList, SearchClass);
-        List<Spells.Element?> SpellClassLevelCurrent = FindSpellByClassBySpellLevel(SpellsList, SearchClass, SearchSpellLevel);
-        
+       
+        List<Spells.Element?> SpellSearchResult = FindSpellAll(SpellsList: SpellsList, SearchSpell: SearchSpell, SearchClass: SearchClass, SearchSpellLevel: SearchSpellLevel);
+
+        //Breakpoint marker
         int test = 1;
+
+
+        // OLD Spell Search Methods
+        /*static List<Spells.Element?> FindSpellByClass(List<Spells.Elements> SpellsList, string SearchClass)
+        {
+
+
+            var SpellsListResult = SpellsList.SelectMany(c => c.Element).Where(cr => cr.Type == "Spell");
+
+            var ClassSpellsResult = SpellsListResult.Where(Spells => Spells.Supports.Contains(SearchClass));
+            return ClassSpellsResult.ToList();
+            int test = 1;
+            return null;
+
+        }*/
+        /*static List<Spells.Element?> FindSpellByClassBySpellLevel(List<Spells.Elements> SpellsList, string SearchClass, string SearchSpellLevel)
+        {
+            
+            var ClassSpellsList = FindSpellByClass(SpellsList, SearchClass);
+            var ClassSpellsResult = ClassSpellsList.Where(Spells => Spells.Setters.Set[1].Text == SearchSpellLevel);
+            return ClassSpellsResult.ToList();
+            int test = 1;
+            return null;
+
+        }*/
+        /*static Spells.Element? FindSpell(List<Spells.Elements> SpellsList, string SearchSpell)
+     {
+
+
+         var SpellsListResult = SpellsList.SelectMany(c => c.Element).Where(cr => cr.Type == "Spell");
+
+         foreach (var Spell in SpellsListResult.Where(Spells => Spells.Name == SearchSpell)
+         )
+         {
+
+             return Spell;
+         }
+         return null;
+     }*/
 
         static Races.Element? FindRace(List<Races.Elements> RacesList, string SearchRace)
         {
@@ -204,21 +260,7 @@ internal class Program
                 return Class;
             }
             return null;
-        }
-        static Spells.Element? FindSpell(List<Spells.Elements> SpellsList, string SearchSpell)
-        {
-
-
-            var SpellsListResult = SpellsList.SelectMany(c => c.Element).Where(cr => cr.Type == "Spell");
-
-            foreach (var Spell in SpellsListResult.Where(Spells => Spells.Name == SearchSpell)
-            )
-            {
-
-                return Spell;
-            }
-            return null;
-        }
+        }    
         static Items.Element? FindWeapon(List<Items.Elements> ItemsList, string SearchWeapon)
         {
 
@@ -262,28 +304,57 @@ internal class Program
             }
             return null;
         }
-        static List<Spells.Element?> FindSpellByClass(List<Spells.Elements> SpellsList, string SearchClass)
+        static List<Spells.Element?> FindSpellAll(List<Spells.Elements> SpellsList, string SearchSpell, string SearchClass, string SearchSpellLevel)
         {
-
-
             var SpellsListResult = SpellsList.SelectMany(c => c.Element).Where(cr => cr.Type == "Spell");
-            var ClassSpellsResult = SpellsListResult.Where(Spells => Spells.Supports.Contains(SearchClass));
-            return ClassSpellsResult.ToList();
-            int test = 1;
-            return null;
+            List<Spells.Element?> SpellSearchResult = new List<Spells.Element?>();
+
+            if (SearchSpell != null && SearchClass == null && SearchSpellLevel == null)
+            {
+                foreach (var Spell in SpellsListResult.Where(Spells => Spells.Name == SearchSpell)
+            )
+                {
+
+                    SpellSearchResult.Add(Spell);
+                }
+
+            }
+            if (SearchSpell != null && SearchClass != null && SearchSpellLevel != null)
+            {
+                foreach (var Spell in SpellsListResult.Where(Spells => Spells.Name == SearchSpell)
+            )
+                {
+
+                    SpellSearchResult.Add(Spell);
+                }
+
+            }
+            if (SearchSpell == null && SearchClass != null && SearchSpellLevel == null)
+            {
+
+                SpellSearchResult = SpellsListResult.Where(Spells => Spells.Supports.Contains(SearchClass)).ToList();
+
+            }
+
+            if (SearchSpell == null && SearchClass != null && SearchSpellLevel != null)
+            {
+
+                var ClassSpellSearchResult = SpellsListResult.Where(Spells => Spells.Supports.Contains(SearchClass)).ToList();
+                SpellSearchResult = ClassSpellSearchResult.Where(Spells => Spells.Setters.Set[1].Text == SearchSpellLevel).ToList();
+
+            }
+
+            if (SearchSpell == null && SearchClass == null && SearchSpellLevel != null)
+            {
+
+                SpellSearchResult = SpellsListResult.Where(Spells => Spells.Supports.Contains(SearchClass)).ToList();
+
+            }
+
+            return SpellSearchResult.ToList();
 
         }
-        static List<Spells.Element?> FindSpellByClassBySpellLevel(List<Spells.Elements> SpellsList, string SearchClass, string SearchSpellLevel)
-        {
-            
-            var ClassSpellsList = FindSpellByClass(SpellsList, SearchClass);
-            var ClassSpellsResult = ClassSpellsList.Where(Spells => Spells.Setters.Set[1].Text == SearchSpellLevel);
-            return ClassSpellsResult.ToList();
-            int test = 1;
-            return null;
 
-        }
-        
     }
 }
 
