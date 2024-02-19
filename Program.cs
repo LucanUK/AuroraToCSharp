@@ -11,7 +11,7 @@ internal class Program
     private static void Main(string[] args)
     {
         
-        string sourceFolderPath = "C:\\Users\\Lucan\\source\\repos\\AuroraToCSharp\\XMLImport";
+        string sourceFolderPath = "C:\\Users\\714122\\Source\\Repos\\AuroraToCSharp-new\\XMLImport";
         string spellsFolderPath = sourceFolderPath + "\\spells";
         string itemsFolderPath = sourceFolderPath + "\\items";
         string racesFolderPath = sourceFolderPath + "\\races";
