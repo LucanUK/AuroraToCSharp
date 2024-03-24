@@ -1,13 +1,22 @@
-﻿using System.Xml.Serialization;
+﻿using Google.Cloud.Firestore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Serialization;
+using static Google.Cloud.Firestore.V1.StructuredQuery.Types;
+
 
 namespace AuroraToCSharp
 {
-   internal class Program
-   {
+    internal class Program
+    {
       private static void Main(string[] args)
       {
+            
+            // Create a document with a random ID in the "users" collection.
+           
 
-         string sourceFolderPath  = "C:\\Users\\714122\\Source\\Repos\\AuroraToCSharp-new\\XMLImport";
+            string sourceFolderPath  = "C:\\Users\\nicko\\Source\\Repos\\LucanUK\\AuroraToCSharp\\XMLImport";
          string spellsFolderPath  = sourceFolderPath + "\\spells";
          string itemsFolderPath   = sourceFolderPath + "\\items";
          string racesFolderPath   = sourceFolderPath + "\\races";
@@ -17,7 +26,7 @@ namespace AuroraToCSharp
          List<ItemsElements>   ItemsList   = new List<ItemsElements>();
          List<RacesElements>   RacesList   = new List<RacesElements>();
          List<ClassesElements> ClassesList = new List<ClassesElements>();
-
+       
          static void Serializer_UnknownElement(object sender, XmlElementEventArgs e)
          {
             if (e.ObjectBeingDeserialized is RacesElement raceElement)
@@ -72,9 +81,9 @@ namespace AuroraToCSharp
                   serializer.UnknownElement += Serializer_UnknownElement;
                   using (TextReader reader = new StringReader(File.ReadAllText(nextFile.FullName)))
                   {
-                     SpellsElements spellsResult = serializer.Deserialize(reader) as SpellsElements;
-                     SpellsList.Add(spellsResult);
-                  }
+                            SpellsElements result = serializer.Deserialize(reader) as SpellsElements;
+                            SpellsList.Add(result);
+                        }
                }
                catch (Exception ex)
                {
@@ -172,7 +181,7 @@ namespace AuroraToCSharp
          string SearchSpellLevel = "5";*/
 
 
-         string SearchRace   = "Elf";
+         string SearchRace   = "Dwarf";
          string SearchWeapon = "Rapier";
          string SearchArmour = "Ring Mail";
          string SearchItem   = "Bag Of Holding";
@@ -180,8 +189,7 @@ namespace AuroraToCSharp
          string SearchClass      = "Druid";
          string SearchSpell      = null;
          string SearchSpellLevel = "2";
-
-
+ 
          RacesElement   RaceCurrent  = Find.FindRace(RacesList, SearchRace);
          ClassesElement ClassCurrent = Find.FindClass(ClassesList, SearchClass);
 
@@ -190,13 +198,18 @@ namespace AuroraToCSharp
          ItemsElement ItemCurrent   = Find.FindItem(ItemsList, SearchItem);
 
          List<SpellsElement?> SpellSearchResult = Find.FindSpellAll(SpellsList: SpellsList, SearchSpell: SearchSpell, SearchClass: SearchClass, SearchSpellLevel: SearchSpellLevel);
-
+         List<SpellsElement> JSONSpellslist = SpellsList[0].Element;
+        
+         JSONFireBase.JsonSpellsAsync(JSONSpellslist).Wait();
          //Breakpoint marker
          int test = 1;
 
 
       }
-   }
+      
+
+    }
+
 }
 
 
