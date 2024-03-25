@@ -13,10 +13,9 @@ namespace AuroraToCSharp
       private static void Main(string[] args)
       {
             
-            // Create a document with a random ID in the "users" collection.
            
 
-            string sourceFolderPath  = "C:\\Users\\nicko\\Source\\Repos\\LucanUK\\AuroraToCSharp\\XMLImport";
+         string sourceFolderPath  = "C:\\Users\\nicko\\Source\\Repos\\LucanUK\\AuroraToCSharp\\XMLImport";
          string spellsFolderPath  = sourceFolderPath + "\\spells";
          string itemsFolderPath   = sourceFolderPath + "\\items";
          string racesFolderPath   = sourceFolderPath + "\\races";
